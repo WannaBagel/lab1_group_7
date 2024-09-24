@@ -3,12 +3,17 @@
 #
 # - richard.m.veras@ou.edu
 
+#small nums
+MIN = 4
+MAX = 512
+STEP = 4
 
 # Increments to use in the tests
 # These are good debugging sizes
-MIN=16
-MAX=2048
-STEP=16
+#MIN=16
+#MAX=2048
+#STEP=16
+#Can make smaller for testing
 
 # These are better benchmarking sizes
 #MIN=32
