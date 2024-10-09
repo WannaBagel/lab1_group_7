@@ -17,23 +17,30 @@
 
 */
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
 #ifndef FUN_NAME
 #define FUN_NAME baseline_transpose
 #endif
 
 void FUN_NAME( int m, int n,
-		float *src,
-		int rs_s, int cs_s,
-		float *dst,
-		int rs_d, int cs_d)
+    float *src,
+    int rs_s, int cs_s,
+    float *dst,
+    int rs_d, int cs_d)
 {
-  for (int i = 0; i < m; i += tile_size) {         
-        int i_max = (i + tile_size > m) ? m : i + tile_size; 
-        for (int j = 0; j < n; ++j) {                       
-            for (int k = i; k < i_max; ++k) {                
-                dst[j * rs_d + k * cs_d] = src[k * rs_s + j * cs_s];
-            }
+// 1D Loop Tiling
+  // 1D Loop Tiling
+  for( int i = 0; i < m; ++i ){
+    for( int j = 0; j < n; ++j ){
+      for(int ii = i; ii < i + m; ii++){
+        for(int jj = j; jj < j + n; jj++){
+           dst[jj*rs_d + ii*cs_d ] =  src[ii*rs_s + jj*cs_s ];
+           //printf("%s\n", dst[j*rs_d + i*cs_d]);
         }
+      }
     }
-      
+  }
 }
+

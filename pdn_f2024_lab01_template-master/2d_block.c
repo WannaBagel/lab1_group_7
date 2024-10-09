@@ -50,14 +50,18 @@ void FUN_NAME( int m, int n,
 		float *dst,
 		int rs_d, int cs_d)
 {
-// 1D Loop Tiling
-  // 1D Loop Tiling
-  for( int i = 0; i < m; ++i ){
-    for( int j = 0; j < n; ++j ){
-      for(int ii = i; ii < i + m; ii++){
-        for(int jj = j; jj < j + n; jj++){
-	         dst[jj*rs_d + ii*cs_d ] =  src[ii*rs_s + jj*cs_s ];
-           //printf("%s\n", dst[j*rs_d + i*cs_d]);
+  const int block_size_m = 8;  // test for size 16
+  const int block_size_n = 8;  
+  //2d blocking
+  for (int i0 = 0; i0 < m; i0 += block_size_m) {
+    for (int j0 = 0; j0 < n; j0 += block_size_n) {
+      for (int i1 = i0; i1 < i0 + block_size_m && i1 < m; i1 += 4)  {
+        for (int j1 = j0; j1 < j0 + block_size_n && j1 < n; j1 += 4) {
+          for (int i2 = i1; i2 < i1 + 4 && i2 < m; ++i2) {
+            for (int j2 = j1; j2 < j1 + 4 && j2 < n; ++j2) {
+              dst[j2 * rs_d + i2 * cs_d] = src[i2 * rs_s + j2 * cs_s];
+            }
+          }
         }
       }
     }
